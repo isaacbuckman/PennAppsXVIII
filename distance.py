@@ -3,12 +3,25 @@ from person import Person
 
 def closest(coord, arr):
     # lat_lon is (latitude, longitude)
+    if len(arr) == 0:
+        return None
     distances = []
     for i in arr:
-        distances.append(distance(coord.coords, i.coords) + distance(coord.dest, i.dest))
+        point_to_dest = distance(i.coords, i.dest)
+        point_to_coord = distance(i.coords, coord.coords)
+        if point_to_dest < point_to_coord:
+            # user destination is closer than other user
+            # no use walking together
+            continue
+        elif point_to_coord > 1:
+            # both users are more than a mile away, don't connect them
+            continue
+        dest_to_dest = distance(i.dest, coord.dest)
+        distances.append((point_to_coord + dest_to_dest, i))
+
     distances = sorted(distances)
-    print(distances)
-    return distances[0]
+    distances.sort(key=lambda x: x[0])
+    return distances[0][1] if len(distances) > 0 else None
 
 def distance(lat_lon1, lat_lon2):
     # using Haversine formula
@@ -27,9 +40,9 @@ def deg2rad(deg):
     return deg * (pi/180)
 
 
-# person1 = Person(38.932094, -76.971309, 39.071899, -76.969937)
-# person2 = Person(38.892536, -76.782341, 39.100659, -76.962164)
-# person3 = Person(38.988669, -77.162576, 38.827305, -76.815286)
-# person4 = Person(27.336435, -82.530655, 27.336435, -82.530655)
-# print(closest(person1,
-#               [person2, person3, person4]))
+person1 = Person(38.900345, -77.050989, 38.909496, -77.043353, 16)
+person2 = Person(39.897607, -77.051332, 38.909496, -77.043353, 17)
+person3 = Person(39.909162, -77.062571, 38.906758, -77.062057, 18)
+person4 = Person(39.900078, -77.048243, 38.912768, -77.042753, 19)
+print(closest(person1,
+              [person2, person3, person4]))
