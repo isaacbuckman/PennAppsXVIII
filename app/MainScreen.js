@@ -7,11 +7,12 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, PermissionsAndroid, TextInput, TouchableOpacity} from 'react-native';
+import {Platform, StyleSheet, Text, View, PermissionsAndroid, TextInput, TouchableOpacity, Alert} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import {uploadStatus, getFriend} from './api'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import CountdownCircle from 'react-native-countdown-circle'
+import MapViewDirections from 'react-native-maps-directions';
 
 const DEFAULT_PADDING = { top: 40, right: 40, bottom: 40, left: 40 };
 
@@ -76,7 +77,13 @@ export default class MainScreen extends React.Component {
   }
 
   timeExpired() {
-
+    Alert.alert(
+      'No one was close by...',
+      'Sorry, but no one was close by. You can try again at a later time.',
+      [
+        {text: 'OK', onPress: () => {}},
+      ],
+      { cancelable: false })
   }
 
   matchSuccessful() {
@@ -85,6 +92,13 @@ export default class MainScreen extends React.Component {
       edgePadding: DEFAULT_PADDING,
       animated: true,
     });
+    Alert.alert(
+      'You successfully matched!',
+      'You matched with ' + this.state.result.penn_id_of_partner + " and will be meeting soon. Just follow the directions.",
+      [
+        {text: 'OK', onPress: () => {}},
+      ],
+      { cancelable: false })
   }
 
   stopTimer() {
@@ -159,6 +173,17 @@ export default class MainScreen extends React.Component {
             pinColor="orange"
           />
         }
+        { this.state.result &&
+          <MapViewDirections
+            origin={this.state.region}
+            destination={{latitude: this.state.dest_lat, longitude: this.state.dest_long}}
+            waypoints={[{latitude: this.state.result.meetup_location[0], longitude: this.state.result.meetup_location[1]}]}
+            mode="walking"
+            strokeWidth={3}
+            strokeColor="hotpink"
+            apikey="AIzaSyCIXYRaiIsZgQRapVNgy1VNK8qduZAcKpM"
+          />
+        }
       </MapView>
         <GooglePlacesAutocomplete
       placeholder='Search'
@@ -197,12 +222,18 @@ export default class MainScreen extends React.Component {
         },
         predefinedPlacesDescription: {
           color: '#1faadb'
+        },
+        listView: {
+          backgroundColor: "white"
         }
       }}
 
       debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
     />
         <View style={styles.bottomBar}>
+          {this.state.searching > -1 &&
+            <Text style={{fontSize: 15, flex: 1, fontWeight: "500"}}>Expiring in</Text>
+          }
           {this.state.searching > -1 &&
             <CountdownCircle
                 style={styles.countdownStyle}
