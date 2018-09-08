@@ -40,7 +40,7 @@ def deg2rad(deg):
     return deg * (pi/180)
 
 def middle(person1, person2):
-    return ((person1.lat + person2.lat)/2, (person1.long, person2.long)/2)
+    return ((person1.lat + person2.lat)/2, (person1.long + person2.long)/2)
 
 person1 = Person(38.900345, -77.050989, 38.909496, -77.043353, 16)
 person2 = Person(39.897607, -77.051332, 38.909496, -77.043353, 17)
