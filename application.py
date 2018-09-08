@@ -6,10 +6,6 @@ application = Flask(__name__)
 
 people = [Person(100,100,150,150), Person(25,62,60,12)]
 
-def update_person(penn_id, lat, long, dest_lat, dest_long):
-	# call to database
-	pass
-
 @application.route('/')
 def index():
 	return "Hello, World!"
@@ -25,7 +21,10 @@ def upload_status():
 
 	for person in people:
 		if person.penn_id == penn_id:
-			update_person(penn_id, lat, long, dest_lat, dest_long)
+			person.lat = lat
+			person.long = long
+			person.dest_lat = dest_lat
+			person.dest_long = dest_long
 			break
 	else:
 		new_person = Person(lat, long, dest_lat, dest_long, penn_id)
