@@ -6,6 +6,10 @@ app = Flask(__name__)
 
 people = [Person(100,100,150,150), Person(25,62,60,12)]
 
+def update_person(penn_id, lat, long, dest_lat, dest_long):
+	# call to database
+	pass
+
 @app.route('/')
 def index():
 	return "Hello, World!"
@@ -19,8 +23,13 @@ def upload_status():
 	dest_long = float(request.form['dest_long'])
 	penn_id = int(request.form['penn_id'])
 
-	new_person = Person(lat, long, dest_lat, dest_long, penn_id)
-	people.append(new_person)
+	for person in people:
+		if person.penn_id == penn_id:
+			update_person(penn_id, lat, long, dest_lat, dest_long)
+			break
+	else:
+		new_person = Person(lat, long, dest_lat, dest_long, penn_id)
+		people.append(new_person)
 
 	return jsonify(success=True)
 
