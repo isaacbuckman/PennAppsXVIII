@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, TextInput, Keyboard} from 'react-native'
 import Auth0 from 'react-native-auth0';
 import { Card, Button } from 'react-native-material-ui';
-import {uploadStatus} from './api'
+import {uploadStatus, getFriend} from './api'
 
 const auth0 = new Auth0({ domain: 'kusti8.auth0.com', clientId: 'c3FBJS3keEnuRH1WPm1Xrt0in43NIzRh' });
 
@@ -20,7 +20,7 @@ export default class LoginScreen extends Component {
         }
 
     componentDidMount() {
-        uploadStatus(1.0, 1.0, 1.0, 232)
+        getFriend(232).then(console.log)
     }
 
     handleLogin() {

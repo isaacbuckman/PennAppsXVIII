@@ -1,7 +1,7 @@
 
 const BASE_URL = "http://localhost:5000"
 
-function encodeURL(url, params) {
+function encodeURL(params) {
     let esc = encodeURIComponent;
     return query = Object.keys(params)
         .map(k => esc(k) + '=' + esc(params[k]))
@@ -9,24 +9,24 @@ function encodeURL(url, params) {
 }
 
 export function uploadStatus(lat, long, dest_lat, dest_long, penn_id) {
-    fetch(BASE_URL+"/upload-status", {
+    return fetch(BASE_URL+"/upload-status/", {
         method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encodeURL({
             lat,
             long,
             dest_lat,
             dest_long,
             penn_id
         }),
-    });
+    }).then(result => {
+        console.log(result)
+    }).catch(console.log)
 }
 
 export function getFriend(penn_id) {
-    return fetch(encodeURL(BASE_URL+"/get-friend", {penn_id})).then(response => {
-        response.json()
-    })
+    return fetch(BASE_URL+"/get-friend/?"+encodeURL({penn_id}), {
+        headers: {"Content-Type": "application/json"} }).then(response => {
+        return response.json()
+    }).catch(console.log)
 }
