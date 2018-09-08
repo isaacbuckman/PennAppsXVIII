@@ -4,7 +4,7 @@ import distance
 
 application = Flask(__name__)
 
-people = [Person(100,100,150,150), Person(25,62,60,12)]
+people = [Person(100,100,150,150,"steve", 0000), Person(25,62,60,12,"pete",9999)]
 
 @application.route('/')
 def index():
@@ -17,6 +17,7 @@ def upload_status():
 	long = float(request.form['long'])
 	dest_lat = float(request.form['dest_lat'])
 	dest_long = float(request.form['dest_long'])
+	name = request.form['name']
 	penn_id = int(request.form['penn_id'])
 
 	for person in people:
@@ -24,7 +25,7 @@ def upload_status():
 			person.update(lat, long, dest_lat, dest_long)
 			break
 	else:
-		new_person = Person(lat, long, dest_lat, dest_long, penn_id)
+		new_person = Person(lat, long, dest_lat, dest_long, name, penn_id)
 		people.append(new_person)
 
 	return jsonify(success=True)
@@ -54,26 +55,26 @@ def get_friend():
 	if closest_person != None:
 		meetup_location = distance.middle(myself, closest_person)
 		people.remove(myself) #if paired, remove myself from database
-		return jsonify(penn_id_of_partner=closest_person.penn_id, meetup_location=meetup_location)
+		return jsonify(partner_id=closest_person.penn_id,partner_name=closest_person.name,meetup_location=meetup_location)
 	else:
-		return jsonify(penn_id_of_partner=False)
+		return jsonify(success=False)
 
-# @application.route('/complete-cancel/', methods=['POST'])
-# def complete_cancel():
-# 	penn_id = int(request.form['penn_id'])
+@application.route('/complete-cancel/', methods=['POST'])
+def complete_cancel():
+	penn_id = int(request.form['penn_id'])
 
-# 	for person in people:
-# 		print(str(person))
+	for person in people:
+		print(str(person))
 
-# 	for person in people:
-# 		if person.penn_id == penn_id:
-# 			people.remove(person)
-# 			print()
-# 			for person in people:
-# 				print(str(person))
-# 			return jsonify(success=True)
+	for person in people:
+		if person.penn_id == penn_id:
+			people.remove(person)
+			print()
+			for person in people:
+				print(str(person))
+			return jsonify(success=True)
 
-# 	return '''<h1>Your penn_id was not found in our database</h1>'''
+	return '''<h1>Your penn_id was not found in our database</h1>'''
 
 if __name__ == '__main__':
 	application.run(debug=True)

@@ -42,9 +42,9 @@ def deg2rad(deg):
 def middle(person1, person2):
     return ((person1.lat + person2.lat)/2, (person1.long + person2.long)/2)
 
-person1 = Person(38.900345, -77.050989, 38.909496, -77.043353, 16)
-person2 = Person(39.897607, -77.051332, 38.909496, -77.043353, 17)
-person3 = Person(39.909162, -77.062571, 38.906758, -77.062057, 18)
-person4 = Person(39.900078, -77.048243, 38.912768, -77.042753, 19)
+person1 = Person(38.900345, -77.050989, 38.909496, -77.043353, "jen", 16)
+person2 = Person(39.897607, -77.051332, 38.909496, -77.043353, "john",17)
+person3 = Person(39.909162, -77.062571, 38.906758, -77.062057, "jennie",18)
+person4 = Person(39.900078, -77.048243, 38.912768, -77.042753, "josh",19)
 print(closest(person1,
               [person2, person3, person4]))
