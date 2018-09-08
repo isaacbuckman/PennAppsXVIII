@@ -8,9 +8,10 @@ people = [Person(100,100,150,150,"steve", 0000), Person(25,62,60,12,"pete",9999)
 
 @application.route('/')
 def index():
-	return "Hello, World"
+	return '''<h1>WolfPackk</h1>'''
 
-#curl --data "lat=10&long=10&dest_lat=25&dest_long=25&email=1234" localhost:5000/upload-status/
+#Wolfpackk2-env.pyhextcpvt.us-east-2.elasticbeanstalk.com
+#curl --data "lat=10&long=10&dest_lat=25&dest_long=25&email=buckman@upenn.edu" localhost:5000/upload-status/
 @application.route('/upload-status/', methods=['POST'])
 def upload_status():
 	lat = float(request.form['lat'])
@@ -18,7 +19,7 @@ def upload_status():
 	dest_lat = float(request.form['dest_lat'])
 	dest_long = float(request.form['dest_long'])
 	name = request.form['name']
-	email = int(request.form['email'])
+	email = request.form['email']
 
 	for person in people:
 		if person.email == email:
@@ -30,15 +31,13 @@ def upload_status():
 
 	return jsonify(success=True)
 
-# http://localhost:5000/get-friend/?email=1234
+# http://localhost:5000/get-friend/?email=hansen@upenn.edu
 @application.route('/get-friend/', methods=['GET'])
 def get_friend():
 	email = request.args.get('email')
 
-	if email != None:
-		email = int(email)
-	else:
-		return '''<h1>Please include a email in the query</h1>'''
+	if email == None:
+		return '''<h1>Please include an email in the query</h1>'''
 
 	myself = None
 	others = []
@@ -55,26 +54,26 @@ def get_friend():
 	if closest_person != None:
 		meetup_location = distance.middle(myself, closest_person)
 		people.remove(myself) #if paired, remove myself from database
-		return jsonify(partner_id=closest_person.email,partner_name=closest_person.name,meetup_location=meetup_location)
+		return jsonify(partner_email=closest_person.email,partner_name=closest_person.name,meetup_location=meetup_location)
 	else:
 		return jsonify(success=False)
 
-@application.route('/complete-cancel/', methods=['POST'])
-def complete_cancel():
-	email = int(request.form['email'])
+# @application.route('/complete-cancel/', methods=['POST'])
+# def complete_cancel():
+# 	email = request.form['email']
 
-	for person in people:
-		print(str(person))
+# 	for person in people:
+# 		print(str(person))
 
-	for person in people:
-		if person.email == email:
-			people.remove(person)
-			print()
-			for person in people:
-				print(str(person))
-			return jsonify(success=True)
+# 	for person in people:
+# 		if person.email == email:
+# 			people.remove(person)
+# 			print()
+# 			for person in people:
+# 				print(str(person))
+# 			return jsonify(success=True)
 
-	return '''<h1>Your email was not found in our database</h1>'''
+# 	return '''<h1>Your email was not found in our database</h1>'''
 
 if __name__ == '__main__':
 	application.run(debug=True)
