@@ -4,7 +4,12 @@ import distance
 
 application = Flask(__name__)
 
-people = [Person(100,100,150,150,"steve", 0000), Person(25,62,60,12,"pete",9999)]
+people = [Person(38.889447, -77.035877, 38.905422, -77.041039, "jo", "jo@upenn.edu"),  # washington monument
+			Person(38.909489, -77.043248, 38.905422, - 77.041039, "abe", "abe@upenn.edu"),  # dupont circle
+			Person(38.890058, -77.049360, 38.905422, - 77.041039, "me", "me@upenn.edu"),  # lincoln memorial
+			Person(38.885384, -77.059784, 38.911817, - 77.039953, "ti", "ti@upenn.edu"),  # arlington cemetary
+			Person(38.890058, -77.049360, 38.911817, - 77.039953, "ya", "ya@upenn.edu"),  # lincoln memorial
+			]
 
 @application.route('/')
 def index():
@@ -53,7 +58,14 @@ def get_friend():
 	closest_person = distance.closest(myself, others)
 	if closest_person != None:
 		meetup_location = distance.middle(myself, closest_person)
-		people.remove(myself) #if paired, remove myself from database
+		try:
+			people.remove(myself) #if paired, remove myself from database
+		except:
+			pass
+		try:
+			people.remove(closest_person)
+		except:
+			pass
 		return jsonify(partner_email=closest_person.email,partner_name=closest_person.name,meetup_location=meetup_location)
 	else:
 		return jsonify(success=False)
