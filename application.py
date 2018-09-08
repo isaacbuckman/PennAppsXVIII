@@ -54,7 +54,7 @@ def get_friend():
 	if closest_person != None:
 		meetup_location = distance.middle(myself, closest_person)
 		people.remove(myself) #if paired, remove myself from database
-		return jsonify(penn_id_of_partner=closest_person.penn_id)
+		return jsonify(penn_id_of_partner=closest_person.penn_id, meetup_location=meetup_location)
 	else:
 		return jsonify(penn_id_of_partner=False)
 
@@ -75,7 +75,5 @@ def get_friend():
 
 # 	return '''<h1>Your penn_id was not found in our database</h1>'''
 
-		
-	
 if __name__ == '__main__':
 	application.run(debug=True)
