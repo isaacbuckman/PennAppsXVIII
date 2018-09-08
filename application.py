@@ -4,7 +4,12 @@ import distance
 
 application = Flask(__name__)
 
-people = [Person(100,100,150,150), Person(25,62,60,12)]
+people = [Person(38.889447, -77.035877, 38.905422, -77.041039, 10),  # washington monument
+			Person(38.909489, -77.043248, 38.905422, - 77.041039, 11),  # dupont circle
+			Person(38.890058, -77.049360, 38.905422, - 77.041039, 12),  # lincoln memorial
+			Person(38.885384, -77.059784, 38.911817, - 77.039953, 13),  # arlington cemetary
+			Person(38.890058, -77.049360, 38.911817, - 77.039953, 14),  # lincoln memorial
+			]
 
 @application.route('/')
 def index():
