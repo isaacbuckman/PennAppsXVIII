@@ -57,7 +57,7 @@ def get_friend():
 	closest_person = distance.closest(myself, others)
 	if closest_person != None:
 		meetup_location = distance.middle(myself, closest_person)
-		return jsonify(penn_id_of_partner=closest_person.penn_id)
+		return jsonify(penn_id_of_partner=closest_person.penn_id, meetup_location=meetup_location)
 	else:
 		return jsonify(penn_id_of_partner=False)
 		
