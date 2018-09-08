@@ -6,13 +6,9 @@ application = Flask(__name__)
 
 people = [Person(100,100,150,150), Person(25,62,60,12)]
 
-def update_person(penn_id, lat, long, dest_lat, dest_long):
-	# call to database
-	pass
-
 @application.route('/')
 def index():
-	return "Hello, World!"
+	return "Hello, World"
 
 #curl --data "lat=10&long=10&dest_lat=25&dest_long=25&penn_id=1234" localhost:5000/upload-status/
 @application.route('/upload-status/', methods=['POST'])
@@ -25,7 +21,7 @@ def upload_status():
 
 	for person in people:
 		if person.penn_id == penn_id:
-			update_person(penn_id, lat, long, dest_lat, dest_long)
+			person.update(lat, long, dest_lat, dest_long)
 			break
 	else:
 		new_person = Person(lat, long, dest_lat, dest_long, penn_id)
@@ -57,11 +53,29 @@ def get_friend():
 	closest_person = distance.closest(myself, others)
 	if closest_person != None:
 		meetup_location = distance.middle(myself, closest_person)
+		people.remove(myself) #if paired, remove myself from database
 		return jsonify(penn_id_of_partner=closest_person.penn_id)
 	else:
 		return jsonify(penn_id_of_partner=False)
+
+# @application.route('/complete-cancel/', methods=['POST'])
+# def complete_cancel():
+# 	penn_id = int(request.form['penn_id'])
+
+# 	for person in people:
+# 		print(str(person))
+
+# 	for person in people:
+# 		if person.penn_id == penn_id:
+# 			people.remove(person)
+# 			print()
+# 			for person in people:
+# 				print(str(person))
+# 			return jsonify(success=True)
+
+# 	return '''<h1>Your penn_id was not found in our database</h1>'''
+
 		
 	
-
 if __name__ == '__main__':
 	application.run(debug=True)
