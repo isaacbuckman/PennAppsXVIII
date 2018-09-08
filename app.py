@@ -47,7 +47,10 @@ def get_friend():
 
 	closest_person = distance.closest(myself, others)
 
-	return jsonify(penn_id_of_partner=closest_person)
+	if closest_person != None:
+		return jsonify(penn_id_of_partner=closest_person.penn_id)
+	else:
+		return jsonify(penn_id_of_partner=False)
 
 if __name__ == '__main__':
 	app.run(debug=True)
