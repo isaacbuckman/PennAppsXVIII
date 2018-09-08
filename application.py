@@ -58,34 +58,28 @@ def get_friend():
 	closest_person = distance.closest(myself, others)
 	if closest_person != None:
 		meetup_location = distance.middle(myself, closest_person)
-		try:
-			people.remove(myself) #if paired, remove myself from database
-		except:
-			pass
-		try:
-			people.remove(closest_person)
-		except:
-			pass
+		# try:
+		# 	people.remove(myself) #if paired, remove myself from database
+		# except:
+		# 	pass
+		# try:
+		# 	people.remove(closest_person)
+		# except:
+		# 	pass
 		return jsonify(partner_email=closest_person.email,partner_name=closest_person.name,meetup_location=meetup_location)
 	else:
 		return jsonify(success=False)
 
-# @application.route('/complete-cancel/', methods=['POST'])
-# def complete_cancel():
-# 	email = request.form['email']
+@application.route('/complete-cancel/', methods=['POST'])
+def complete_cancel():
+	email = request.form['email']
 
-# 	for person in people:
-# 		print(str(person))
+	for person in people:
+		if person.email == email:
+			people.remove(person)
+			return jsonify(success=True)
 
-# 	for person in people:
-# 		if person.email == email:
-# 			people.remove(person)
-# 			print()
-# 			for person in people:
-# 				print(str(person))
-# 			return jsonify(success=True)
-
-# 	return '''<h1>Your email was not found in our database</h1>'''
+	return '''<h1>Your email was not found in our database</h1>'''
 
 if __name__ == '__main__':
 	application.run(debug=True)
