@@ -46,11 +46,13 @@ def get_friend():
 		return '''<h1>Your penn_id was not found in our database</h1>'''
 
 	closest_person = distance.closest(myself, others)
-
+	meetup_location = distance.middle(myself, closest_person)
 	if closest_person != None:
-		return jsonify(penn_id_of_partner=closest_person.penn_id)
+		return jsonify(penn_id_of_partner=closest_person.penn_id, meetup_location=meetup_location)
 	else:
 		return jsonify(penn_id_of_partner=False)
+		
+	
 
 if __name__ == '__main__':
 	app.run(debug=True)
