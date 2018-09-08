@@ -27,9 +27,9 @@ def deg2rad(deg):
     return deg * (pi/180)
 
 
-person1 = Person(38.932094, -76.971309, 39.071899, -76.969937)
-person2 = Person(38.892536, -76.782341, 39.100659, -76.962164)
-person3 = Person(38.988669, -77.162576, 38.827305, -76.815286)
-person4 = Person(27.336435, -82.530655, 27.336435, -82.530655)
-print(closest(person1,
-              [person2, person3, person4]))
+# person1 = Person(38.932094, -76.971309, 39.071899, -76.969937)
+# person2 = Person(38.892536, -76.782341, 39.100659, -76.962164)
+# person3 = Person(38.988669, -77.162576, 38.827305, -76.815286)
+# person4 = Person(27.336435, -82.530655, 27.336435, -82.530655)
+# print(closest(person1,
+#               [person2, person3, person4]))
