@@ -3,6 +3,7 @@ package com.pennappsxviii;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.horcrux.svg.SvgPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.auth0.react.A0Auth0Package;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
                 new MainReactPackage(),
+            new SvgPackage(),
             new MapsPackage(),
             new VectorIconsPackage(),
             new A0Auth0Package()

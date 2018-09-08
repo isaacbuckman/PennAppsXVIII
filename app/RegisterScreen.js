@@ -6,7 +6,7 @@ import {uploadStatus, getFriend, addUser} from './api'
 
 const auth0 = new Auth0({ domain: 'kusti8.auth0.com', clientId: 'c3FBJS3keEnuRH1WPm1Xrt0in43NIzRh' });
 
-export default class LoginScreen extends Component {
+export default class RegisterScreen extends Component {
     static navigationOptions = {
         header: null,
         };
@@ -24,27 +24,32 @@ export default class LoginScreen extends Component {
     }
 
     handleLogin() {
-        console.log("AUTH")
-        auth0
-        .auth
-        .passwordRealm({username: this.state.username, password: this.state.password, realm: "Username-Password-Authentication"})
-        .then(apikey => {
-            Keyboard.dismiss()
-            this.props.navigation.navigate("Main", {email: this.state.username})
-        })
-        .catch(error => {
-            this.setState({error: true})
-        });
+        if (this.state.username.match(/upenn\.edu/g)) {
+            auth0
+            .auth
+            .createUser({email: this.state.username, password: this.state.password, connection: "Username-Password-Authentication"})
+            .then(apikey => {
+                Keyboard.dismiss()
+                this.setState({error: "Now please verify your email address."})
+            })
+            .catch(error => {
+                console.log(error)
+                this.setState({error: error.name})
+            });
+        } else {
+            console.log("Invalid email")
+            this.setState({error: "Invalid email. Please use your upenn.edu email"})
+        }
     }
 
     render() {
         return (
             <View style={styles.masterView}>
-                <Text style={styles.titleStyle}>S I G N - I N</Text>
+                <Text style={styles.titleStyle}>R E G I S T E R</Text>
                 <TextInput style={styles.textInput} placeholder="Email" underlineColorAndroid="rgb(164,164,164)" placeholderTextColor="rgb(164,164,164)" onChangeText={username => this.setState({username})} />
                 <TextInput style={styles.textInput} secureTextEntry placeholder="Password" underlineColorAndroid="rgb(164,164,164)" placeholderTextColor="rgb(164,164,164)" onChangeText={password => this.setState({password})} />
                 {this.state.error &&
-                    <Text style={{color: "red", fontSize: 15}}>Your username or password is incorrect. Make sure you verified your email also.</Text>
+                    <Text style={{color: "red", fontSize: 15}}>{this.state.error}</Text>
                 }
                 <TouchableOpacity onPress={() => this.handleLogin()} style={[styles.signinButton, {backgroundColor: "#d48578", marginBottom: 200}]}>
                     <Text style={styles.signinText}>Enter</Text>

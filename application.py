@@ -22,7 +22,7 @@ def upload_status():
 	long = float(request.form['long'])
 	dest_lat = float(request.form['dest_lat'])
 	dest_long = float(request.form['dest_long'])
-	penn_id = int(request.form['penn_id'])
+	penn_id = request.form['penn_id']
 
 	for person in people:
 		if person.penn_id == penn_id:
@@ -40,7 +40,7 @@ def get_friend():
 	penn_id = request.args.get('penn_id')
 
 	if penn_id != None:
-		penn_id = int(penn_id)
+		penn_id = penn_id
 	else:
 		return '''<h1>Please include a penn_id in the query</h1>'''
 

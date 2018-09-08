@@ -19,8 +19,6 @@ export function uploadStatus(lat, long, dest_lat, dest_long, penn_id) {
             dest_long,
             penn_id
         }),
-    }).then(result => {
-        console.log(result)
     }).catch(console.log)
 }
 
