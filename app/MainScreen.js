@@ -36,7 +36,7 @@ export default class MainScreen extends React.Component {
 
   getCurrentLocation() {
     return new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(position => resolve(position), e => reject(e), { enableHighAccuracy: true, timeout: 2000, maximumAge: 3600000 });
+      navigator.geolocation.getCurrentPosition(position => resolve(position), e => reject(e));
     });
   }
 

@@ -83,5 +83,14 @@ def complete_cancel():
 
 	return '''<h1>Your email was not found in our database</h1>'''
 
+@application.route('/delete-all/', methods=['POST'])
+def delete_all():
+	del people[:]
+	return jsonify(success=True)
+
+@application.route('/data/', methods=['GET'])
+def get_dataset():
+	return jsonify(data=[str(person) for person in people])
+
 if __name__ == '__main__':
 	application.run(debug=True)
