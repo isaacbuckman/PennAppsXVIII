@@ -1,5 +1,5 @@
 
-const BASE_URL = "Wolfpackk2-env.pyhextcpvt.us-east-2.elasticbeanstalk.com"
+const BASE_URL = "http://Wolfpackk2-env.pyhextcpvt.us-east-2.elasticbeanstalk.com"
 
 function encodeURL(params) {
     let esc = encodeURIComponent;
@@ -45,10 +45,10 @@ export function addUser(email, password) {
 }
 
 export function cancelUser(email) {
-    return fetch(BASE_URL+"/upload-status/", {
+    return fetch(BASE_URL+"/complete-cancel/", {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: encodeURL({
             email
-        })}).then(res => res.json())
+        })}).then(console.log)
 }

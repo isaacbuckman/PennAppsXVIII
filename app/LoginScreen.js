@@ -33,7 +33,8 @@ export default class LoginScreen extends Component {
             .auth
             .userInfo({token: apikey.accessToken}).then( results => {
                 Keyboard.dismiss()
-                this.props.navigation.navigate("Main", {email: this.state.username, name: results.Name})
+                console.log(results)
+                this.props.navigation.navigate("Main", {email: this.state.username, name: results["https://kusti8:auth0:com/FullName"]})
             })
         })
         .catch(error => {
