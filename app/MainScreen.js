@@ -216,7 +216,17 @@ export default class MainScreen extends React.Component {
       
       styles={{
         textInputContainer: {
-          width: '100%',
+          backgroundColor: 'rgba(0,0,0,0)',
+          width: '97%',
+          height: 60
+        },
+        textInput: {
+          marginLeft: 0,
+          marginRight: 0,
+          height: 60,
+          color: '#5d5d5d',
+          fontSize: 18,
+          elevation: 10
         },
         container: {
           height: 80,
@@ -251,7 +261,9 @@ export default class MainScreen extends React.Component {
             />
           }
           {this.state.result && this.state.result.seconds_until_meetup &&
-            <Text style={{fontSize: 15, fontWeight: "500"}}>Seconds to meetup: {this.state.result.seconds_until_meetup}</Text>
+            <View style={styles.secondCircle}>
+              <Text style={styles.signinText}>{Math.ceil(this.state.result.seconds_until_meetup/60)} min</Text>
+            </View>
           }
           <TouchableOpacity onPress={() => this.searchFriend()} style={[styles.signinButton, {backgroundColor: "white"}]}>
             <Text style={styles.signinText}>Search</Text>
@@ -309,5 +321,16 @@ const styles = StyleSheet.create({
   countdownStyle: {
     flex: 1,
     padding:7
-  }
+  },
+  secondCircle: {
+    borderRadius: 35,
+    width: 70,
+    height: 70,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    margin: 7,
+    backgroundColor: "white"
+  },
  });
