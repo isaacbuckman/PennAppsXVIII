@@ -248,6 +248,9 @@ export default class MainScreen extends React.Component {
                 textStyle={{ fontSize: 20 }}
             />
           }
+          {this.state.result && this.state.result.seconds_until_meetup &&
+            <Text style={{fontSize: 15, fontWeight: "500"}}>Seconds to meetup: {this.state.result.seconds_until_meetup}</Text>
+          }
           <TouchableOpacity onPress={() => this.searchFriend()} style={[styles.signinButton, {backgroundColor: "white"}]}>
             <Text style={styles.signinText}>Search</Text>
           </TouchableOpacity>
