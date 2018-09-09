@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from person import Person
 import distance
+import requests
 
 application = Flask(__name__)
 
@@ -60,15 +61,21 @@ def get_friend():
 	closest_person = distance.closest(myself, others)
 	if closest_person != None:
 		meetup_location = distance.middle(myself, closest_person)
-		# try:
-		# 	people.remove(myself) #if paired, remove myself from database
-		# except:
-		# 	pass
-		# try:
-		# 	people.remove(closest_person)
-		# except:
-		# 	pass
-		return jsonify(partner_email=closest_person.email,partner_name=closest_person.name,meetup_location=meetup_location)
+
+		myself_request = requests.get("https://maps.googleapis.com/maps/api/distancematrix/json?origins={},{}&destinations={},{}&mode=walking&departure_time=now&key=AIzaSyCIXYRaiIsZgQRapVNgy1VNK8qduZAcKpM".format(myself.lat,myself.long,myself.dest_lat,myself.dest_long)).json()['rows'][0]['elements'][0]
+		them_request = requests.get("https://maps.googleapis.com/maps/api/distancematrix/json?origins={},{}&destinations={},{}&mode=walking&departure_time=now&key=AIzaSyCIXYRaiIsZgQRapVNgy1VNK8qduZAcKpM".format(closest_person.lat,closest_person.long,closest_person.dest_lat,closest_person.dest_long)).json()['rows'][0]['elements'][0]
+
+		if myself_request['status'] == 'OK' and them_request['status'] == 'OK':
+			myself_time = myself_request['duration']['value']
+			them_time = them_request['duration']['value']
+		else:
+			return jsonify(partner_email=closest_person.email,partner_name=closest_person.name,meetup_location=meetup_location,seconds_until_meetup=False)
+
+		# myself_time = requests.get("https://maps.googleapis.com/maps/api/distancematrix/json?origins={},{}&destinations={},{}&mode=walking&departure_time=now&key=AIzaSyCIXYRaiIsZgQRapVNgy1VNK8qduZAcKpM".format(myself.lat,myself.long,myself.dest_lat,myself.dest_long)).json()['rows'][0]['elements'][0]['duration']['value']
+		# them_time = requests.get("https://maps.googleapis.com/maps/api/distancematrix/json?origins={},{}&destinations={},{}&mode=walking&departure_time=now&key=AIzaSyCIXYRaiIsZgQRapVNgy1VNK8qduZAcKpM".format(closest_person.lat,closest_person.long,closest_person.dest_lat,closest_person.dest_long)).json()['rows'][0]['elements'][0]['duration']['value']
+		wait = max(myself_time,them_time)
+
+		return jsonify(partner_email=closest_person.email,partner_name=closest_person.name,meetup_location=meetup_location,seconds_until_meetup=wait)
 	else:
 		return jsonify(success=False)
 
