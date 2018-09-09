@@ -127,7 +127,9 @@ export default class MainScreen extends React.Component {
   searchFriend() {
     uploadStatus(this.state.region.latitude, this.state.region.longitude, this.state.dest_lat, this.state.dest_long, this.props.navigation.getParam("email", "none@example.com"), this.props.navigation.getParam("name", "John Smith")).then(
       () => {
+        console.log("Uploaded status")
         getFriend(this.props.navigation.getParam("email", "none@example.com")).then(json => {
+          console.log("Getting friend")
           console.log(json)
           if (!json || !json.partner_email) {
             if (!this.counter) {
