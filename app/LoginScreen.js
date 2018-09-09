@@ -29,8 +29,12 @@ export default class LoginScreen extends Component {
         .auth
         .passwordRealm({username: this.state.username, password: this.state.password, realm: "Username-Password-Authentication"})
         .then(apikey => {
-            Keyboard.dismiss()
-            this.props.navigation.navigate("Main", {email: this.state.username})
+            auth0
+            .auth
+            .userInfo({token: apikey.accessToken}).then( results => {
+                Keyboard.dismiss()
+                this.props.navigation.navigate("Main", {email: this.state.username, name: results.Name})
+            })
         })
         .catch(error => {
             this.setState({error: true})

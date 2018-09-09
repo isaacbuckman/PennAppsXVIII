@@ -1,5 +1,5 @@
 
-const BASE_URL = "http://localhost:5000"
+const BASE_URL = "Wolfpackk2-env.pyhextcpvt.us-east-2.elasticbeanstalk.com"
 
 function encodeURL(params) {
     let esc = encodeURIComponent;
@@ -8,7 +8,7 @@ function encodeURL(params) {
         .join('&');
 }
 
-export function uploadStatus(lat, long, dest_lat, dest_long, penn_id) {
+export function uploadStatus(lat, long, dest_lat, dest_long, penn_id, name) {
     return fetch(BASE_URL+"/upload-status/", {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -17,13 +17,14 @@ export function uploadStatus(lat, long, dest_lat, dest_long, penn_id) {
             long,
             dest_lat,
             dest_long,
-            penn_id
+            email: penn_id,
+            name
         }),
     }).catch(console.log)
 }
 
 export function getFriend(penn_id) {
-    return fetch(BASE_URL+"/get-friend/?"+encodeURL({penn_id}), {
+    return fetch(BASE_URL+"/get-friend/?"+encodeURL({email: penn_id}), {
         headers: {"Content-Type": "application/json"} }).then(response => {
         return response.json()
     }).catch(console.log)
@@ -41,4 +42,13 @@ export function addUser(email, password) {
             email_verified: false
         })
     }).then(console.log).catch(console.log)
+}
+
+export function cancelUser(email) {
+    return fetch(BASE_URL+"/upload-status/", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encodeURL({
+            email
+        })}).then(res => res.json())
 }

@@ -9,7 +9,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, PermissionsAndroid, TextInput, TouchableOpacity, Alert} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
-import {uploadStatus, getFriend} from './api'
+import {uploadStatus, getFriend, cancelUser} from './api'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import CountdownCircle from 'react-native-countdown-circle'
 import MapViewDirections from 'react-native-maps-directions';
@@ -36,7 +36,7 @@ export default class MainScreen extends React.Component {
 
   getCurrentLocation() {
     return new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(position => resolve(position), e => reject(e));
+      navigator.geolocation.getCurrentPosition(position => resolve(position), e => reject(e), { enableHighAccuracy: true, timeout: 2000, maximumAge: 3600000 });
     });
   }
 
@@ -84,6 +84,7 @@ export default class MainScreen extends React.Component {
         {text: 'OK', onPress: () => {}},
       ],
       { cancelable: false })
+      cancelUser(this.props.navigation.getParam("email", "none@example.com"))
   }
 
   matchSuccessful() {
@@ -94,11 +95,12 @@ export default class MainScreen extends React.Component {
     });
     Alert.alert(
       'You successfully matched!',
-      'You matched with ' + this.state.result.penn_id_of_partner + " and will be meeting soon. Just follow the directions.",
+      'You matched with ' + this.state.result.partner_name + " (" + this.state.result.partner_email + ") and will be meeting soon. Just follow the directions.",
       [
         {text: 'OK', onPress: () => {}},
       ],
       { cancelable: false })
+      setTimeout(() => cancelUser(this.props.navigation.getParam("email", "none@example.com")), 10000)
   }
 
   stopTimer() {
@@ -123,10 +125,11 @@ export default class MainScreen extends React.Component {
   }
 
   searchFriend() {
-    uploadStatus(this.state.region.latitude, this.state.region.longitude, this.state.dest_lat, this.state.dest_long, this.props.navigation.getParam("email", "none@example.com")).then(
+    uploadStatus(this.state.region.latitude, this.state.region.longitude, this.state.dest_lat, this.state.dest_long, this.props.navigation.getParam("email", "none@example.com"), this.props.navigation.getParam("name", "John Smith")).then(
       () => {
         getFriend(this.props.navigation.getParam("email", "none@example.com")).then(json => {
-          if (!json || !json.penn_id_of_partner) {
+          console.log(json)
+          if (!json || !json.partner_email) {
             if (!this.counter) {
               this.startCounter()
             }

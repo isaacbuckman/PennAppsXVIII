@@ -15,6 +15,7 @@ export default class RegisterScreen extends Component {
             this.state = {
                 username: "",
                 password: "",
+                name: "",
                 error: false
             }
         }
@@ -27,7 +28,7 @@ export default class RegisterScreen extends Component {
         if (this.state.username.match(/upenn\.edu/g)) {
             auth0
             .auth
-            .createUser({email: this.state.username, password: this.state.password, connection: "Username-Password-Authentication"})
+            .createUser({email: this.state.username, password: this.state.password, connection: "Username-Password-Authentication", metadata: {"Name": this.state.name}})
             .then(apikey => {
                 Keyboard.dismiss()
                 this.setState({error: "Now please verify your email address."})
@@ -46,6 +47,7 @@ export default class RegisterScreen extends Component {
         return (
             <View style={styles.masterView}>
                 <Text style={styles.titleStyle}>R E G I S T E R</Text>
+                <TextInput style={styles.textInput} placeholder="Name" underlineColorAndroid="rgb(164,164,164)" placeholderTextColor="rgb(164,164,164)" onChangeText={name => this.setState({name})} />
                 <TextInput style={styles.textInput} placeholder="Email" underlineColorAndroid="rgb(164,164,164)" placeholderTextColor="rgb(164,164,164)" onChangeText={username => this.setState({username})} />
                 <TextInput style={styles.textInput} secureTextEntry placeholder="Password" underlineColorAndroid="rgb(164,164,164)" placeholderTextColor="rgb(164,164,164)" onChangeText={password => this.setState({password})} />
                 {this.state.error &&
